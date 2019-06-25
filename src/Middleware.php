@@ -19,23 +19,22 @@ class Middleware
     /**
      * 使用静态方法创建实例
      * @param string $namespace
-     * @param array $middleware
-     * @return $this
+     * @param array $handlerNames
+     * @return Middleware
      */
-    public static function new(string $namespace, array $middleware)
+    public static function new(string $namespace, array $handlerNames)
     {
-        return new static($namespace, $middleware);
+        return new static($namespace, $handlerNames);
     }
 
     /**
-     * 构造
-     * MiddlewareHandler constructor.
+     * Middleware constructor.
      * @param string $namespace
-     * @param array $middleware
+     * @param array $handlerNames
      */
-    public function __construct(string $namespace, array $middleware)
+    public function __construct(string $namespace, array $handlerNames)
     {
-        $this->_instances = static::newInstances($namespace, $middleware);
+        $this->_instances = static::newInstances($namespace, $handlerNames);
     }
 
     /**
@@ -58,17 +57,17 @@ class Middleware
     /**
      * 实例化中间件
      * @param string $namespace
-     * @param array $middleware
+     * @param array $handlerNames
      * @return array
      */
-    protected static function newInstances(string $namespace, array $middleware)
+    protected static function newInstances(string $namespace, array $handlerNames): array
     {
         $instances = [];
-        foreach ($middleware as $key => $name) {
+        foreach ($handlerNames as $key => $name) {
             $class  = "{$namespace}\\{$name}Middleware";
             $object = new $class();
-            if (!($object instanceof MiddlewareInterface)) {
-                throw new \RuntimeException("{$class} type is not 'Mix\Core\Middleware\MiddlewareInterface'");
+            if (!($object instanceof MiddlewareHandlerInterface)) {
+                throw new \RuntimeException("{$class} type is not '" . MiddlewareHandlerInterface::class . "'");
             }
             $instances[$key] = $object;
         }

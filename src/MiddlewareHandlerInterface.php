@@ -3,11 +3,11 @@
 namespace Mix\Middleware;
 
 /**
- * Interface MiddlewareInterface
+ * Interface MiddlewareHandlerInterface
  * @package Mix\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-interface MiddlewareInterface
+interface MiddlewareHandlerInterface
 {
 
     /**

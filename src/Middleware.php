@@ -3,18 +3,18 @@
 namespace Mix\Middleware;
 
 /**
- * Class MiddlewareHandler
+ * Class Middleware
  * @package Mix\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-class MiddlewareHandler
+class Middleware
 {
 
     /**
      * 实例集合
      * @var array
      */
-    protected $instances = [];
+    protected $_instances = [];
 
     /**
      * 使用静态方法创建实例
@@ -35,7 +35,7 @@ class MiddlewareHandler
      */
     public function __construct(string $namespace, array $middleware)
     {
-        $this->instances = static::newInstances($namespace, $middleware);
+        $this->_instances = static::newInstances($namespace, $middleware);
     }
 
     /**
@@ -46,7 +46,7 @@ class MiddlewareHandler
      */
     public function run(callable $callback, ...$params)
     {
-        $item = array_shift($this->instances);
+        $item = array_shift($this->_instances);
         if (empty($item)) {
             return call_user_func_array($callback, $params);
         }

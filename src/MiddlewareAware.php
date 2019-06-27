@@ -3,11 +3,11 @@
 namespace Mix\Middleware;
 
 /**
- * Class Middleware
+ * Class MiddlewareAware
  * @package Mix\Middleware
  * @author liu,jian <coder.keda@gmail.com>
  */
-class Middleware
+class MiddlewareAware
 {
 
     /**
@@ -19,22 +19,22 @@ class Middleware
     /**
      * 使用静态方法创建实例
      * @param string $namespace
-     * @param array $handlerNames
+     * @param array $middlewares
      * @return Middleware
      */
-    public static function new(string $namespace, array $handlerNames)
+    public static function new(string $namespace, array $middlewares)
     {
-        return new static($namespace, $handlerNames);
+        return new static($namespace, $middlewares);
     }
 
     /**
      * Middleware constructor.
      * @param string $namespace
-     * @param array $handlerNames
+     * @param array $middlewares
      */
-    public function __construct(string $namespace, array $handlerNames)
+    public function __construct(string $namespace, array $middlewares)
     {
-        $this->_instances = static::newInstances($namespace, $handlerNames);
+        $this->_instances = static::newInstances($namespace, $middlewares);
     }
 
     /**
@@ -57,17 +57,17 @@ class Middleware
     /**
      * 实例化中间件
      * @param string $namespace
-     * @param array $handlerNames
-     * @return array
+     * @param array $middlewares
+     * @return MiddlewareInterface[]
      */
-    protected static function newInstances(string $namespace, array $handlerNames): array
+    protected static function newInstances(string $namespace, array $middlewares): array
     {
         $instances = [];
         foreach ($handlerNames as $key => $name) {
             $class  = "{$namespace}\\{$name}Middleware";
             $object = new $class();
-            if (!($object instanceof MiddlewareHandlerInterface)) {
-                throw new \RuntimeException("{$class} type is not '" . MiddlewareHandlerInterface::class . "'");
+            if (!($object instanceof MiddlewareInterface)) {
+                throw new \RuntimeException("{$class} type is not '" . MiddlewareInterface::class . "'");
             }
             $instances[$key] = $object;
         }

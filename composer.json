@@ -17,7 +17,8 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "psr/http-server-middleware": "~1.0"
+    "psr/http-server-middleware": "~1.0",
+    "mix/bean": "v2.1.x-dev"
   },
   "autoload": {
     "psr-4": {

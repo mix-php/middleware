@@ -3,10 +3,10 @@
 namespace Mix\Middleware\Exception;
 
 /**
- * Class InstantiationException
+ * Class TypeException
  * @package Mix\Exception
  * @author liu,jian <coder.keda@gmail.com>
  */
-class InstantiationException extends \RuntimeException
+class TypeException extends \RuntimeException
 {
 }

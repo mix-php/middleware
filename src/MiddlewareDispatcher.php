@@ -3,7 +3,7 @@
 namespace Mix\Middleware;
 
 use Mix\Bean\BeanInjector;
-use Mix\Middleware\Exception\InstantiationException;
+use Mix\Middleware\Exception\TypeException;
 
 /**
  * Class MiddlewareDispatcher
@@ -48,7 +48,7 @@ class MiddlewareDispatcher
             $class  = "{$namespace}\\{$name}Middleware";
             $object = new $class();
             if (!($object instanceof MiddlewareInterface)) {
-                throw new InstantiationException("{$class} type is not '" . MiddlewareInterface::class . "'");
+                throw new TypeException("{$class} type is not '" . MiddlewareInterface::class . "'");
             }
             $objects[$key] = $object;
         }
@@ -63,12 +63,13 @@ class MiddlewareDispatcher
      */
     public function dispatch(callable $callback, ...$params)
     {
+        /** @var MiddlewareInterface $object */
         $object = array_shift($this->objects);
         if (empty($object)) {
             return call_user_func_array($callback, $params);
         }
-        return $object->handle($callback, function () use ($callback, $params) {
-            return $this->run($callback, ...$params);
+        return $object->process($callback, function () use ($callback, $params) {
+            return $this->dispatch($callback, ...$params);
         });
     }
 
